@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: config/Dockerfile
+    container_name: fresh
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+  caddy:
+    image: caddy:2.6.4
+    container_name: caddy
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - app
